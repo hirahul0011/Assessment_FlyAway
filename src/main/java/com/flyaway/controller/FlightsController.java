@@ -144,6 +144,32 @@ public class FlightsController {
 				return page;		
 			}
 
+		@RequestMapping(value="registerPassengerDetails",method=RequestMethod.GET)
+		public String registerPassengerDetails(@RequestParam("firstname")String firstname,			
+				@RequestParam("ID")Long ID,
+				@RequestParam("source")String source,
+				@RequestParam("destination")String destination,
+				@RequestParam("airline")String airline,
+				@RequestParam("price")Double price,
+				@RequestParam("noOfPersons")Integer noOfPersons,			
+				@RequestParam("travelDate")@DateTimeFormat(pattern="EEEEE MMMMM dd yyyy")Date travelDate,
+				ModelMap map) {
+			
+			String page="register";
+			
+			map.addAttribute("firstname", firstname);
+			map.addAttribute("ID", ID);
+			map.addAttribute("source", source);
+			map.addAttribute("destination", destination);
+			map.addAttribute("airline", airline);
+			map.addAttribute("billingAmount", price*noOfPersons);
+			map.addAttribute("noOfPersons", noOfPersons);
+			map.addAttribute("travelDate", travelDate);
+			
+			return page;		
+			
+		}
+
 	
 
 }
