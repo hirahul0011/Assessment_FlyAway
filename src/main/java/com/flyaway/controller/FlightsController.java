@@ -744,6 +744,32 @@ public class FlightsController {
 					
 				}
 
+				@RequestMapping(value="adminChangePassword",method=RequestMethod.GET)	
+				public String adminChangePassword(@RequestParam("firstname")String firstname,
+						@RequestParam("userFirstName")String userFirstName,
+						@RequestParam("userLastName")String userLastName,
+						@RequestParam("userPassword")String userPassword,
+						@RequestParam("userContactNo")String userContactNo,
+						@RequestParam("userEmailID")String userEmailID,
+						@RequestParam("userCardNo")String userCardNo,
+						@RequestParam("userCardExpiry")@DateTimeFormat(pattern="MMMMM dd yyyy")Date userCardExpiry,
+						ModelMap map){
+					
+					String page="adminChangePassword";		
+					
+					map.addAttribute("firstname", firstname);
+					map.addAttribute("userFirstName", userFirstName);
+					map.addAttribute("userLastName", userLastName);
+					map.addAttribute("userPassword", userPassword);
+					map.addAttribute("userContactNo", userContactNo);
+					map.addAttribute("userEmailID", userEmailID);
+					map.addAttribute("userCardNo", userCardNo);
+					map.addAttribute("userCardExpiry", userCardExpiry);		
+					
+					return page;
+					
+				}
+
 	
 
 }
