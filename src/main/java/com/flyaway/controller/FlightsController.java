@@ -723,6 +723,27 @@ public class FlightsController {
 					
 				}
 
+				@RequestMapping(value="reDirect",method=RequestMethod.GET)	
+				public String reDirect(@RequestParam("firstname")String firstname,			
+						ModelMap map){
+					
+					String page="searchPage";
+					
+					List<Admin> user=(List<Admin>)parametersDAO.getTheUserDetails(firstname);
+					
+					map.addAttribute("places", parametersDAO.getAllPlaces());
+					map.addAttribute("airlines", parametersDAO.getAllAirlines());
+					
+					map.addAttribute("firstname", firstname);
+					map.addAttribute("userContactNo", user.get(0).getContactNo());
+					map.addAttribute("userEmailID", user.get(0).getEmailID());
+					map.addAttribute("userCardNo", user.get(0).getCardNo());
+					map.addAttribute("userCardExpiry", user.get(0).getCardExpiry());
+					
+					return page;
+					
+				}
+
 	
 
 }
