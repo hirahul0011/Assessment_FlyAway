@@ -770,6 +770,43 @@ public class FlightsController {
 					
 				}
 
+				@RequestMapping(value="adminPasswordValidation",method=RequestMethod.POST)	
+				public String adminPasswordValidation(@RequestParam("firstname")String firstname,
+						@RequestParam("userFirstName")String userFirstName,
+						@RequestParam("userLastName")String userLastName,
+						@RequestParam("userPassword")String userPassword,
+						@RequestParam("userContactNo")String userContactNo,
+						@RequestParam("userEmailID")String userEmailID,
+						@RequestParam("userCardNo")String userCardNo,
+						@RequestParam("userCardExpiry")@DateTimeFormat(pattern="MMMMM dd yyyy")Date userCardExpiry,
+						ModelMap map){
+					
+					String page="adminChangePassword";		
+					
+					map.addAttribute("firstname", firstname);
+					map.addAttribute("userFirstName", userFirstName);
+					map.addAttribute("userLastName", userLastName);
+					map.addAttribute("userPassword", userPassword);
+					map.addAttribute("userContactNo", userContactNo);
+					map.addAttribute("userEmailID", userEmailID);
+					map.addAttribute("userCardNo", userCardNo);
+					map.addAttribute("userCardExpiry", userCardExpiry);
+					
+					if(userPassword!=null) {
+						if(userPassword.length()<8 || userPassword.length()>15) {
+							map.addAttribute("errorMessage", "Please enter password between 8 to 15 character length!");			
+						}else {				
+							parametersDAO.changeUserPassword(userFirstName, userPassword);
+							page="adminChangePassConfirmation";					
+						}			
+					}else {
+						map.addAttribute("errorMessage", "Please enter password to continue!");
+					}
+					
+					return page;
+					
+				}
+
 	
 
 }
