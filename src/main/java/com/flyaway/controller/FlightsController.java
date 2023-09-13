@@ -807,6 +807,20 @@ public class FlightsController {
 					
 				}
 
+				@RequestMapping(value="redirectII",method=RequestMethod.GET)	
+				public String redirectII(@RequestParam("firstname")String firstname,			
+						ModelMap map){
+					
+					String page="administration";
+					List<Admin> users=(List<Admin>)parametersDAO.getAllUsersDetails();
+					
+					map.addAttribute("firstname", firstname);
+					map.addAttribute("users", users);		
+					
+					return page;
+					
+				}
+
 	
 
 }
