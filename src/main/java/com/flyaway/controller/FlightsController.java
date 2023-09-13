@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.flyaway.dao.ParametersDAO;
 import com.flyaway.entity.Admin;
 import com.flyaway.entity.Flights;
@@ -401,6 +403,110 @@ public class FlightsController {
 				
 				return page;		
 			}
+
+			// Method III
+				// To be tried with ObjectMapper as suggested by Amit Dahiya Sir
+			//	@RequestMapping(value="bookingDetailsCapture",method=RequestMethod.POST)
+			//	public String bookingDetailsCapture(
+			//			@RequestBody String request
+			//			) {		
+			//		String page;
+			//		
+			//		System.out.println("request: "+request);
+			//		return "page";
+			//	}	
+				
+				
+				@RequestMapping(value="confirmAndPay",method=RequestMethod.GET)	
+				public String confirmAndPay(@RequestParam("firstname")String firstname,
+						@RequestParam("ID")Long ID,
+						@RequestParam("source")String source,
+						@RequestParam("destination")String destination,
+						@RequestParam("airline")String airline,			
+						@RequestParam("noOfPersons")Integer noOfPersons,
+						@RequestParam("billingAmount")Double billingAmount,
+						@RequestParam("travelDate")@DateTimeFormat(pattern="EEEEE MMMMM dd yyyy")Date travelDate,
+			//			@Validated @RequestParam("passengerList") List<Passengers> passengerList,
+			//			@RequestParam("passengerList") List<Passengers> passengerList,
+						ModelMap map) throws JsonMappingException, JsonProcessingException {
+					
+					String page="confirmAndPay";
+					List<Passengers> passengerList=new ArrayList();
+					String p;
+					String sex;
+					int age;
+					
+					List<Admin> user=(List<Admin>)parametersDAO.getTheUserDetails(firstname);
+					
+					HttpServletRequest request=((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+					
+					for(int i=1;i<=50;i++) {
+						if(request.getParameter("p"+i)!=null) {
+							p=request.getParameter("p"+i);
+							sex=request.getParameter("sex"+i);
+							age=Integer.parseInt(request.getParameter("age"+i));
+							Passengers passenger=new Passengers(p, sex, age);
+							passengerList.add(passenger);
+			//				System.out.println(request.getParameter("p"+i));
+			//				System.out.println(request.getParameter("sex"+i));
+			//				System.out.println(request.getParameter("age"+i));
+						}
+					}
+					
+			//		String passengerList = request.getParameter("passengerList");
+			//		List<Map<String,Passengers>> list=new Gson().fromJson(passengerList, List.class) ;
+					// VVIMP Initial part of String to Object mapping
+					// Changes made to the server.xml file are also restored
+					
+			//		ObjectMapper mapper=new ObjectMapper();
+			//		String str=new Gson().fromJson(passengerList, String.class) ;
+			//				
+			//			List<Passengers> passengers = mapper.readValue(str,
+			//					mapper.getTypeFactory().constructParametricType(String.class, Object.class));
+					
+			//		System.out.println(((Passengers)list.get(0)).getName());
+			//		System.out.println(((Passengers)list.get(1)).getName());
+			//		List<Passengers> passengers=list.stream().map(map -> get("name")).collect(Collectors.toList());
+					
+			//		ObjectMapper mapper=new ObjectMapper();
+			//		mapper.readValue(list, Passengers[].class);
+			//		mapper.readValue(list, null)
+			//		
+			//		List<List<String>> passen = new ArrayList<>(list.values());
+			//		List<Passengers> tot=list.stream().flatMap(Collection<Map<String,Passengers>>::stream).collect(Collectors.toList());
+					// VVIMP String to object list conversion not working
+					// Changes made to the server.xml file are also restored
+					
+			//		String passengerList = request.getParameter("passengerList");
+			//		List<Map<String,Passengers>> list=new Gson().fromJson(passengerList, List.class) ;
+			//		List<Passengers> passengers=list.stream().map(map0 -> {
+			//			Passengers passenger=new Passengers();
+			//			passenger.name=map0.get("name").toString();
+			//			passenger.sex=map0.get("sex").toString();
+			//			passenger.age=Integer.parseInt(map0.get("age").toString());
+			//		}).collect(Collectors.toList());
+					// VVIMP Map list to object list conversion not working
+					// Changes made to the server.xml file are also restored
+			
+					map.addAttribute("passengerList", passengerList);
+					
+					map.addAttribute("firstname", firstname);
+					map.addAttribute("userContactNo", user.get(0).getContactNo());
+					map.addAttribute("userEmailID", user.get(0).getEmailID());
+					map.addAttribute("userCardNo", user.get(0).getCardNo());
+					map.addAttribute("userCardExpiry", user.get(0).getCardExpiry());
+					
+					map.addAttribute("ID", ID);
+					map.addAttribute("source", source);
+					map.addAttribute("destination", destination);
+					map.addAttribute("airline", airline);
+					map.addAttribute("billingAmount", billingAmount);
+					map.addAttribute("noOfPersons", noOfPersons);
+					map.addAttribute("travelDate", travelDate);
+					
+					return page;
+					
+				}
 
 	
 
