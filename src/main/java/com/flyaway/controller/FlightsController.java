@@ -508,6 +508,58 @@ public class FlightsController {
 					
 				}
 
+				@RequestMapping(value="continueWithPayment",method=RequestMethod.GET)	
+				public String continueWithPayment(@RequestParam("firstname")String firstname,
+						@RequestParam("ID")Long ID,
+						@RequestParam("source")String source,
+						@RequestParam("destination")String destination,
+						@RequestParam("airline")String airline,			
+						@RequestParam("noOfPersons")Integer noOfPersons,
+						@RequestParam("billingAmount")Double billingAmount,
+						@RequestParam("travelDate")@DateTimeFormat(pattern="EEEEE MMMMM dd yyyy")Date travelDate,
+						ModelMap map){
+					
+					String page="continueToPay";
+					
+					List<Passengers> passengerList=new ArrayList();
+					String p;
+					String sex;
+					int age;
+					
+					List<Admin> user=(List<Admin>)parametersDAO.getTheUserDetails(firstname);
+					
+					HttpServletRequest request=((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+					
+					for(int i=1;i<=50;i++) {
+						if(request.getParameter("p"+i)!=null) {
+							p=request.getParameter("p"+i);
+							sex=request.getParameter("sex"+i);
+							age=Integer.parseInt(request.getParameter("age"+i));
+							Passengers passenger=new Passengers(p, sex, age);
+							passengerList.add(passenger);			
+						}
+					}
+					
+					map.addAttribute("passengerList", passengerList);
+					
+					map.addAttribute("firstname", firstname);
+					map.addAttribute("userContactNo", user.get(0).getContactNo());
+					map.addAttribute("userEmailID", user.get(0).getEmailID());
+					map.addAttribute("userCardNo", user.get(0).getCardNo());
+					map.addAttribute("userCardExpiry", user.get(0).getCardExpiry());
+					
+					map.addAttribute("ID", ID);
+					map.addAttribute("source", source);
+					map.addAttribute("destination", destination);
+					map.addAttribute("airline", airline);
+					map.addAttribute("billingAmount", billingAmount);
+					map.addAttribute("noOfPersons", noOfPersons);
+					map.addAttribute("travelDate", travelDate);
+					
+					return page;
+					
+				}
+
 	
 
 }
